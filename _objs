@@ -1,0 +1,32 @@
+OBJSX = \
+	$(OBJECT_DIR)/main.o \
+	$(OBJECT_DIR)/Printer.o \
+	$(OBJECT_DIR)/ServerSocket.o \
+	$(OBJECT_DIR)/Socket.o \
+	$(OBJECT_DIR)/Datagram.o \
+	$(OBJECT_DIR)/DatagramSocket.o \
+	$(OBJECT_DIR)/INetAddress.o \
+	$(OBJECT_DIR)/InitSocket.o \
+	$(OBJECT_DIR)/ExString.o \
+
+
+build_objs: $(OBJECT_DIR)/main.o $(OBJECT_DIR)/Printer.o $(OBJECT_DIR)/ServerSocket.o $(OBJECT_DIR)/Socket.o $(OBJECT_DIR)/Datagram.o $(OBJECT_DIR)/DatagramSocket.o $(OBJECT_DIR)/INetAddress.o $(OBJECT_DIR)/InitSocket.o $(OBJECT_DIR)/ExString.o
+
+$(OBJECT_DIR)/main.o: $(SOURCE_DIR)/main.cpp
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/main.cpp -o $(OBJECT_DIR)/main.o $(LIBS)
+$(OBJECT_DIR)/Printer.o: $(SOURCE_DIR)/_default/src/Printer.cpp
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_default/src/Printer.cpp -o $(OBJECT_DIR)/Printer.o $(LIBS)
+$(OBJECT_DIR)/ServerSocket.o: $(SOURCE_DIR)/_libs/socket/tcp/ServerSocket.cpp
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/tcp/ServerSocket.cpp -o $(OBJECT_DIR)/ServerSocket.o $(LIBS)
+$(OBJECT_DIR)/Socket.o: $(SOURCE_DIR)/_libs/socket/tcp/Socket.cpp
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/tcp/Socket.cpp -o $(OBJECT_DIR)/Socket.o $(LIBS)
+$(OBJECT_DIR)/Datagram.o: $(SOURCE_DIR)/_libs/socket/udp/Datagram.cpp
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/udp/Datagram.cpp -o $(OBJECT_DIR)/Datagram.o $(LIBS)
+$(OBJECT_DIR)/DatagramSocket.o: $(SOURCE_DIR)/_libs/socket/udp/DatagramSocket.cpp
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/udp/DatagramSocket.cpp -o $(OBJECT_DIR)/DatagramSocket.o $(LIBS)
+$(OBJECT_DIR)/INetAddress.o: $(SOURCE_DIR)/_libs/socket/_all/INetAddress.cpp
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/_all/INetAddress.cpp -o $(OBJECT_DIR)/INetAddress.o $(LIBS)
+$(OBJECT_DIR)/InitSocket.o: $(SOURCE_DIR)/_libs/socket/_all/InitSocket.cpp
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/_all/InitSocket.cpp -o $(OBJECT_DIR)/InitSocket.o $(LIBS)
+$(OBJECT_DIR)/ExString.o: $(SOURCE_DIR)/_libs/string/ExString.cpp
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/string/ExString.cpp -o $(OBJECT_DIR)/ExString.o $(LIBS)

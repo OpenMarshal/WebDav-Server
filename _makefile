@@ -1,0 +1,78 @@
+####################################
+#            Constants             #
+####################################
+
+OUTPUT_NAME = webdav_server
+OUTPUT_DIR = .
+
+ifeq ($(OPERATING_SYSTEM), windows )
+	OUTPUT_EXT = .exe
+else
+	OUTPUT_EXT = 
+endif
+
+# Config
+OBJECT_DIR = bin
+SOURCE_DIR = src
+DEFAULT_SOURCE_NAME = _default
+LIBS = -lws2_32 -lwsock32
+COMP = g++
+
+# Macros
+DEFAULT_SOURCE_DIR = ${SOURCE_DIR}/${DEFAULT_SOURCE_NAME}
+CFLAGS = -std=c++11 -Wall -I$(SOURCE_DIR) -I${DEFAULT_SOURCE_DIR} -D$(OPERATING_SYSTEM) -w
+OUTPUT_FULL = $(OUTPUT_DIR)/$(OUTPUT_NAME)$(OUTPUT_EXT)
+
+
+
+
+
+####################################
+#             Commands             #
+####################################
+
+# Default command
+default: build
+
+# Files
+-include _objs
+
+# Build command
+build: init build_all
+	@$(COMP) $(CFLAGS) $(OBJSX) -o $(OUTPUT_FULL) $(LIBS)
+	@echo "Build finished with success."
+	@echo "You can find the resulting file at : "$(OUTPUT_FULL)
+
+# Debug mode
+debug: CFLAGS += -DDEBUG
+debug: build
+
+# Release mode
+release: build
+	
+# Clean/Clear command
+clean:
+	@rm -f $(OUTPUT_FULL)
+	@rm -f -r $(OBJECT_DIR)
+	@echo "Cleaned, ready for a new build."
+clear: clean
+	
+# Help
+help:
+	@echo "Commands : make [CMD]"
+	@echo "With [CMD] option :"
+	@echo "   * build [DEFAULT]"
+	@echo "   * clean/clear"
+
+	
+####################################
+#           Compilations           #
+####################################
+
+init:
+	@echo "Compiling..."
+	@rm -f $(OUTPUT_FULL)
+	@mkdir -p $(OBJECT_DIR)
+	@mkdir -p $(OUTPUT_DIR)
+	
+build_all: build_objs
