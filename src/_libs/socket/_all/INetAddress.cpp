@@ -1,8 +1,8 @@
 #include "INetAddress.h"
-#include "ErrorManager.h"
+#include "_libs/error/ErrorManager.h"
 
 
-INetAddress::INetAddress(char* ip, uint port)
+INetAddress::INetAddress(char* ip, uint port) throw(int)
     : size(sizeof(struct sockaddr_in)),
     port(port)
 {
@@ -13,15 +13,14 @@ INetAddress::INetAddress(char* ip, uint port)
         ::inet_pton(AF_INET, ip, &addr.sin_addr)
     #endif
                 != 0)
-        error = ::getErrorNo();
-    else
-        error = 0;
+		throw ::getErrorNo();
 
     addr.sin_family = AF_INET;
     addr.sin_port = ::htons(port);
 }
 
-INetAddress::INetAddress(char* ip) : INetAddress(ip, 0)
+INetAddress::INetAddress(char* ip) throw(int)
+	: INetAddress(ip, 0)
 { }
 
 INetAddress::INetAddress(struct sockaddr_in addr)
@@ -44,13 +43,30 @@ INetAddress::INetAddress() : INetAddress((uint)0)
 { }
 
 
+const char* INetAddress::getIP() const
+{
+	#if OS == WIN
+		// No need to free the result :
+		//   It is located in a reserved memory area
+		//   and this area is overrided each time
+		//   this function is called.
+		return inet_ntoa(addr.sin_addr);
+	#elif OS == LINUX
+		// To work like Windows do, we need to
+		// allocate a reserved area for ip.
+		// Each time this function is called,
+		// this area is overrided.
+		static char ip[16];
+		inet_ntop(AF_INET, &addr.sin_addr, ip, 16);
+		return ip;
+	#endif
+}
 
 
 std::ostream& operator << (std::ostream& out, const INetAddress& addr)
 {
 	const char* ip = addr.getIP();
 	out << ip << ":" << addr.getPort();
-	delete(ip);
 	
 	return out;
 }

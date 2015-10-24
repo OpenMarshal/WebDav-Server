@@ -1,13 +1,14 @@
 #include "ServerSocket.h"
-#include "../_all/ErrorManager.h"
+#include "_libs/error/ErrorManager.h"
+#include "_libs/thread/thread.h"
 #include "../_all/Sock.h"
-
+#include <thread>
 
 ServerSocket::ServerSocket(INetAddress addr, int timeout) throw(SocketCreationException)
 {
     this->addr = addr;
 
-    sock = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    sock = ::socket(AF_INET, SOCK_STREAM, 0);
     if(sock == -1)
 	{
 		int error = ::getErrorNo();
@@ -16,6 +17,13 @@ ServerSocket::ServerSocket(INetAddress addr, int timeout) throw(SocketCreationEx
     
 	if(timeout > 0)
 		::setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeout, sizeof(timeout));
+	
+	int on = 1;
+	if(::setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (const char*)&on, sizeof(on)) < 0)
+	{
+		int error = ::getErrorNo();
+		throw SocketCreationException("setsockopt.SO_REUSEADDR", error);
+	}
 
     if(::bind(sock, addr.toPtrSockAddr(), addr.getLength()) == -1)
 	{
@@ -33,25 +41,61 @@ ServerSocket::ServerSocket(int timeout) throw(SocketCreationException) : ServerS
 ServerSocket::ServerSocket() throw(SocketCreationException) : ServerSocket(INetAddress())
 { }
 
-Socket* ServerSocket::accept()
+struct s_accept
+{
+	ServerSocket* _this;
+	Socket** csock;
+};
+static void* acceptBlocking(struct s_accept* data)
 {
 	struct sockaddr_in addr;
 	int addrLen = sizeof(addr);
 	
-	int clientSock = ::accept(sock, (struct sockaddr*)&addr, &addrLen);
+	int clientSock = ::accept(data->_this->getSocketID(), (struct sockaddr*)&addr, &addrLen);
 	
-	return new Socket(addr, clientSock);
+	(*data->csock) = new Socket(addr, clientSock);
+	
+	void* xd = new int(30);
+	return xd;
+}
+Socket* ServerSocket::accept()
+{
+	Socket* csock;
+	struct s_accept data = { this, &csock };
+	
+	Thread t_accept((thread_method)::acceptBlocking);
+	t_accept.start(&data);
+	t_accept.join();
+	
+	return csock;
+}
+void ServerSocket::accept(Socket* csock)
+{
+	csock = 0;
+	struct s_accept data = { this, &csock };
+	
+	Thread t_accept((thread_method)::acceptBlocking);
+	t_accept.start(&data);
+	t_accept.join();
 }
 
-void ServerSocket::listen()
+void ServerSocket::listen() throw(SocketCreationException)
 {
 	this->listen(SOMAXCONN);
 }
-void ServerSocket::listen(int maxConnections)
+void ServerSocket::listen(int maxConnections) throw(SocketCreationException)
 {
-	::listen(sock, maxConnections);
+	if(::listen(sock, maxConnections) < 0)
+	{
+		int error = ::getErrorNo();
+		throw SocketCreationException("listen", error);
+	}
 }
-void ServerSocket::close()
+int ServerSocket::close()
 {
-	::close(sock);
+	#if OS == WIN
+		return ::closesocket(sock);
+	#elif OS == LINUX
+		return ::close(sock);
+	#endif
 }

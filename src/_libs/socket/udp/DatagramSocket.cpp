@@ -1,5 +1,5 @@
 #include "DatagramSocket.h"
-#include "../_all/ErrorManager.h"
+#include "_libs/error/ErrorManager.h"
 #include "../_all/Sock.h"
 
 
@@ -82,4 +82,13 @@ void DatagramSocket::send(char* data, uint len, struct sockaddr* addr, uint addr
 {
     if(::sendto(sock, data, len, 0, addr, addrLen) < 0)
         throw ::getErrorNo();
+}
+
+int DatagramSocket::close()
+{
+	#if OS == WIN
+		return ::closesocket(sock);
+	#elif OS == LINUX
+		return ::close(sock);
+	#endif
 }

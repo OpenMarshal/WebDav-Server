@@ -2,8 +2,9 @@
 #            Constants             #
 ####################################
 
-OUTPUT_NAME = webdav_server
-OUTPUT_DIR = .
+-include _project
+
+OUTPUT_DIR = out
 
 ifeq ($(OPERATING_SYSTEM), windows )
 	OUTPUT_EXT = .exe
@@ -15,7 +16,6 @@ endif
 OBJECT_DIR = bin
 SOURCE_DIR = src
 DEFAULT_SOURCE_NAME = _default
-LIBS = -lws2_32 -lwsock32
 COMP = g++
 
 # Macros

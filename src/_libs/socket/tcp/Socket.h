@@ -15,10 +15,10 @@ public:
 	void send(const char* data, uint len) throw(int);
 	void send(const char* data, uint start, uint len) throw(int);
 	
-	void receive(char* data, uint maxLen) throw(int);
-	void receive(char* data, uint start, uint len) throw(int);
+	uint receive(char* data, uint maxLen) throw(int);
+	uint receive(char* data, uint start, uint len) throw(int);
 	
-	void close();
+	int close();
     
     INetAddress getAddress()
     {

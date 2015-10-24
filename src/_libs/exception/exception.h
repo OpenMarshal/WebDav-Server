@@ -19,5 +19,11 @@ class RuntimeException : public std::exception
 	}
 };
 
+
+
+#include "all/ParsingException.h"
+
+
+
 #endif	/* _LIBS_EXCEPTION_H */
 

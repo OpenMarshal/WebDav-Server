@@ -1,0 +1,58 @@
+#include "file.h"
+
+#include <string>
+
+void bendTest();
+
+void bendTest_date(struct tm timeinfo, int dataLen, const char* format, const char* name)
+{
+	char data[dataLen + 1];
+	strftime(data, dataLen, format, &timeinfo);
+	getOutput() << name << " : " << data << std::endl;
+}
+void bendTest_file(::IFile* f)
+{
+	getOutput() << "isOpen : " << (f->isOpen() ? "YES" : "NO") << std::endl;
+	getOutput() << "exists : " << (f->exists() ? "YES" : "NO") << std::endl;
+	getOutput() << "isDir : " << (f->isDir() ? "YES" : "NO") << std::endl;
+	getOutput() << "isFile : " << (f->isFile() ? "YES" : "NO") << std::endl;
+	getOutput() << "getFileName : " << f->getFileName() << std::endl;
+	getOutput() << "getExtension : " << f->getExtension() << std::endl;
+	getOutput() << "getMimeType : " << f->getMimeType() << std::endl;
+	getOutput() << "getSize : " << f->getSize() << std::endl;
+	
+	bendTest_date(f->getLastModifiedTime(), 30, "%a, %d %b %Y %X", "getLastModifiedTime");
+	bendTest_date(f->getLastModifiedTime(), 30, "%Y-%m-%dT%X", "getLastModifiedTime");
+	
+	getOutput() << "getPath : " << f->getPath() << std::endl;
+	
+	/*
+	virtual char readChar() = 0;
+	virtual void readChar(char* charPtr) = 0;
+	virtual int read(char* buffer, int max) = 0;
+	virtual bool open() throw(FileNotFoundException) = 0;
+	virtual void close() = 0;
+	virtual bool isEndOfFile() = 0;
+	
+	virtual struct tm* getLastStatusChangedTime() = 0;
+	virtual struct tm* getLastAccessTime() = 0;
+	*/
+}
+
+void bendTest()
+{
+	std::string str("root/public/choco");
+	
+	::IFile* f = new ::File(str);
+	
+	getOutput() << str << std::endl;
+	bendTest_file(f);
+	
+	getOutput() << "LIST SUB FILES" << std::endl;
+	for(::IFile* sf : f->listFiles())
+	{
+		getOutput() << "*******X********" << std::endl;
+		bendTest_file(sf);
+	}
+	getOutput() << "*******X********" << std::endl;
+}

@@ -15,11 +15,17 @@ public:
     ServerSocket() throw(SocketCreationException);
 	
 	Socket* accept();
+	void accept(Socket* csock);
 	
-	void listen();
-	void listen(int maxConnections);
+	void listen() throw(SocketCreationException);
+	void listen(int maxConnections) throw(SocketCreationException);
 	
-	void close();
+	int close();
+	
+	sint getSocketID()
+	{
+		return sock;
+	}
     
     INetAddress getAddress()
     {

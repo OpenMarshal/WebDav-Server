@@ -1,5 +1,5 @@
-#ifndef _LIBS_SOCK_H
-#define	_LIBS_SOCK_H
+//#ifndef _LIBS_SOCK_H
+//#define	_LIBS_SOCK_H
 
 #include "General.h"
 
@@ -20,5 +20,5 @@ extern "C" {
 }
 #endif
 
-#endif	/* _LIBS_SOCK_H */
+//#endif	/* _LIBS_SOCK_H */
 

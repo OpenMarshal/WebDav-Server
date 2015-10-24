@@ -1,6 +1,13 @@
 OBJSX = \
 	$(OBJECT_DIR)/main.o \
+	$(OBJECT_DIR)/CommandManager.o \
+	$(OBJECT_DIR)/Options.o \
+	$(OBJECT_DIR)/Propfind.o \
 	$(OBJECT_DIR)/Printer.o \
+	$(OBJECT_DIR)/file.o \
+	$(OBJECT_DIR)/HttpMessage.o \
+	$(OBJECT_DIR)/HttpRequest.o \
+	$(OBJECT_DIR)/HttpResponse.o \
 	$(OBJECT_DIR)/ServerSocket.o \
 	$(OBJECT_DIR)/Socket.o \
 	$(OBJECT_DIR)/Datagram.o \
@@ -8,25 +15,41 @@ OBJSX = \
 	$(OBJECT_DIR)/INetAddress.o \
 	$(OBJECT_DIR)/InitSocket.o \
 	$(OBJECT_DIR)/ExString.o \
-
-
-build_objs: $(OBJECT_DIR)/main.o $(OBJECT_DIR)/Printer.o $(OBJECT_DIR)/ServerSocket.o $(OBJECT_DIR)/Socket.o $(OBJECT_DIR)/Datagram.o $(OBJECT_DIR)/DatagramSocket.o $(OBJECT_DIR)/INetAddress.o $(OBJECT_DIR)/InitSocket.o $(OBJECT_DIR)/ExString.o
-
-$(OBJECT_DIR)/main.o: $(SOURCE_DIR)/main.cpp
-	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/main.cpp -o $(OBJECT_DIR)/main.o $(LIBS)
-$(OBJECT_DIR)/Printer.o: $(SOURCE_DIR)/_default/src/Printer.cpp
-	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_default/src/Printer.cpp -o $(OBJECT_DIR)/Printer.o $(LIBS)
-$(OBJECT_DIR)/ServerSocket.o: $(SOURCE_DIR)/_libs/socket/tcp/ServerSocket.cpp
-	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/tcp/ServerSocket.cpp -o $(OBJECT_DIR)/ServerSocket.o $(LIBS)
-$(OBJECT_DIR)/Socket.o: $(SOURCE_DIR)/_libs/socket/tcp/Socket.cpp
-	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/tcp/Socket.cpp -o $(OBJECT_DIR)/Socket.o $(LIBS)
-$(OBJECT_DIR)/Datagram.o: $(SOURCE_DIR)/_libs/socket/udp/Datagram.cpp
-	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/udp/Datagram.cpp -o $(OBJECT_DIR)/Datagram.o $(LIBS)
-$(OBJECT_DIR)/DatagramSocket.o: $(SOURCE_DIR)/_libs/socket/udp/DatagramSocket.cpp
-	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/udp/DatagramSocket.cpp -o $(OBJECT_DIR)/DatagramSocket.o $(LIBS)
-$(OBJECT_DIR)/INetAddress.o: $(SOURCE_DIR)/_libs/socket/_all/INetAddress.cpp
-	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/_all/INetAddress.cpp -o $(OBJECT_DIR)/INetAddress.o $(LIBS)
-$(OBJECT_DIR)/InitSocket.o: $(SOURCE_DIR)/_libs/socket/_all/InitSocket.cpp
-	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/socket/_all/InitSocket.cpp -o $(OBJECT_DIR)/InitSocket.o $(LIBS)
-$(OBJECT_DIR)/ExString.o: $(SOURCE_DIR)/_libs/string/ExString.cpp
-	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs/string/ExString.cpp -o $(OBJECT_DIR)/ExString.o $(LIBS)
+	$(OBJECT_DIR)/thread.o \
+ 
+build_objs:  $(OBJECT_DIR)/main.o $(OBJECT_DIR)/CommandManager.o $(OBJECT_DIR)/Options.o $(OBJECT_DIR)/Propfind.o $(OBJECT_DIR)/Printer.o $(OBJECT_DIR)/file.o $(OBJECT_DIR)/HttpMessage.o $(OBJECT_DIR)/HttpRequest.o $(OBJECT_DIR)/HttpResponse.o $(OBJECT_DIR)/ServerSocket.o $(OBJECT_DIR)/Socket.o $(OBJECT_DIR)/Datagram.o $(OBJECT_DIR)/DatagramSocket.o $(OBJECT_DIR)/INetAddress.o $(OBJECT_DIR)/InitSocket.o $(OBJECT_DIR)/ExString.o $(OBJECT_DIR)/thread.o
+ 
+$(OBJECT_DIR)/main.o: $(SOURCE_DIR)/main.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/main.cpp -o $(OBJECT_DIR)/main.o $(LIBS) 
+$(OBJECT_DIR)/CommandManager.o: $(SOURCE_DIR)/commands\CommandManager.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/commands\CommandManager.cpp -o $(OBJECT_DIR)/CommandManager.o $(LIBS) 
+$(OBJECT_DIR)/Options.o: $(SOURCE_DIR)/commands\commands\Options.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/commands\commands\Options.cpp -o $(OBJECT_DIR)/Options.o $(LIBS) 
+$(OBJECT_DIR)/Propfind.o: $(SOURCE_DIR)/commands\commands\Propfind.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/commands\commands\Propfind.cpp -o $(OBJECT_DIR)/Propfind.o $(LIBS) 
+$(OBJECT_DIR)/Printer.o: $(SOURCE_DIR)/_default\src\Printer.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_default\src\Printer.cpp -o $(OBJECT_DIR)/Printer.o $(LIBS) 
+$(OBJECT_DIR)/file.o: $(SOURCE_DIR)/_libs\file\file.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\file\file.cpp -o $(OBJECT_DIR)/file.o $(LIBS) 
+$(OBJECT_DIR)/HttpMessage.o: $(SOURCE_DIR)/_libs\protocol\http\HttpMessage.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\protocol\http\HttpMessage.cpp -o $(OBJECT_DIR)/HttpMessage.o $(LIBS) 
+$(OBJECT_DIR)/HttpRequest.o: $(SOURCE_DIR)/_libs\protocol\http\HttpRequest.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\protocol\http\HttpRequest.cpp -o $(OBJECT_DIR)/HttpRequest.o $(LIBS) 
+$(OBJECT_DIR)/HttpResponse.o: $(SOURCE_DIR)/_libs\protocol\http\HttpResponse.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\protocol\http\HttpResponse.cpp -o $(OBJECT_DIR)/HttpResponse.o $(LIBS) 
+$(OBJECT_DIR)/ServerSocket.o: $(SOURCE_DIR)/_libs\socket\tcp\ServerSocket.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\socket\tcp\ServerSocket.cpp -o $(OBJECT_DIR)/ServerSocket.o $(LIBS) 
+$(OBJECT_DIR)/Socket.o: $(SOURCE_DIR)/_libs\socket\tcp\Socket.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\socket\tcp\Socket.cpp -o $(OBJECT_DIR)/Socket.o $(LIBS) 
+$(OBJECT_DIR)/Datagram.o: $(SOURCE_DIR)/_libs\socket\udp\Datagram.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\socket\udp\Datagram.cpp -o $(OBJECT_DIR)/Datagram.o $(LIBS) 
+$(OBJECT_DIR)/DatagramSocket.o: $(SOURCE_DIR)/_libs\socket\udp\DatagramSocket.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\socket\udp\DatagramSocket.cpp -o $(OBJECT_DIR)/DatagramSocket.o $(LIBS) 
+$(OBJECT_DIR)/INetAddress.o: $(SOURCE_DIR)/_libs\socket\_all\INetAddress.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\socket\_all\INetAddress.cpp -o $(OBJECT_DIR)/INetAddress.o $(LIBS) 
+$(OBJECT_DIR)/InitSocket.o: $(SOURCE_DIR)/_libs\socket\_all\InitSocket.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\socket\_all\InitSocket.cpp -o $(OBJECT_DIR)/InitSocket.o $(LIBS) 
+$(OBJECT_DIR)/ExString.o: $(SOURCE_DIR)/_libs\string\ExString.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\string\ExString.cpp -o $(OBJECT_DIR)/ExString.o $(LIBS) 
+$(OBJECT_DIR)/thread.o: $(SOURCE_DIR)/_libs\thread\thread.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\thread\thread.cpp -o $(OBJECT_DIR)/thread.o $(LIBS) 

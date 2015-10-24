@@ -1,0 +1,36 @@
+#include "Propfind.h"
+
+
+void bendTest();
+
+
+
+
+void bendTest()
+{
+	Propfind* p = new Propfind();
+	
+	
+	HttpResponseBuilder* res;
+	
+	try
+	{
+		Command* cmd = cmdMng->getCommand(req->getCommand());
+		
+		ConnectionEnv env("root");
+		res = cmd->compute(&env, req);
+	}
+	catch(FileNotFoundException ex)
+	{
+		getOutput() << " ** NOT FOUND : " << ex.getFilePath() << std::endl;
+		res = &HttpResponse::create()
+			.setMessage("Not Found")
+			.setCode(404);
+	}
+	catch(CommandNotFoundException ex)
+	{
+		res = &HttpResponse::create()
+			.setMessage("Not Implemented")
+			.setCode(501);
+	}
+}

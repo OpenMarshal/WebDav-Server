@@ -1,3 +1,5 @@
 makefile
 bin
-webdav_server*
+out
+*.stackdump
+root

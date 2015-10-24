@@ -20,6 +20,8 @@ public:
     void send(const Datagram* dtg, INetAddress dest) const throw(int);
     void send(char* data, uint len, struct sockaddr* addr, uint addrLen) const throw(int);
     void send(char* data, uint len, INetAddress dest) const throw(int);
+	
+	int close();
     
     INetAddress getAddress()
     {

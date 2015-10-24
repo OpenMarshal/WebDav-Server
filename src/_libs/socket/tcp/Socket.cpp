@@ -1,5 +1,5 @@
 #include "Socket.h"
-#include "../_all/ErrorManager.h"
+#include "_libs/error/ErrorManager.h"
 #include "../_all/Sock.h"
 
 
@@ -45,27 +45,33 @@ void Socket::send(const char* data, uint start, uint len) throw(int)
 }
 
 
-void Socket::receive(char* data, uint maxLen) throw(int)
+uint Socket::receive(char* data, uint maxLen) throw(int)
 {
-	this->receive(data, 0, maxLen);
+	return this->receive(data, 0, maxLen);
 }
-void Socket::receive(char* data, uint start, uint maxLen) throw(int)
+uint Socket::receive(char* data, uint start, uint maxLen) throw(int)
 {
 	int read;
 	
-#if OS == WIN
-    read = ::recvfrom(sock, data + start, maxLen, 0, addr.toPtrSockAddr(), (int*)addr.getPtrLength());
-#elif OS == LINUX
-    read = ::recvfrom(sock, data + start, maxLen, 0, addr.toPtrSockAddr(), addr.getPtrLength());
-#endif
+	#if OS == WIN
+		read = ::recvfrom(sock, data + start, maxLen, 0, addr.toPtrSockAddr(), (int*)addr.getPtrLength());
+	#elif OS == LINUX
+		read = ::recvfrom(sock, data + start, maxLen, 0, addr.toPtrSockAddr(), addr.getPtrLength());
+	#endif
 
     if(read < 0)
         throw ::getErrorNo();
+	
+	return (uint)read;
 }
 
 
 
-void Socket::close()
+int Socket::close()
 {
-	::close(sock);
+	#if OS == WIN
+		return ::closesocket(sock);
+	#elif OS == LINUX
+		return ::close(sock);
+	#endif
 }

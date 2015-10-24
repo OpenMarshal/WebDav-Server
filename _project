@@ -1,0 +1,6 @@
+
+# File output name (without extension)
+OUTPUT_NAME = webdav_server
+
+# Libraries
+LIBS = -lws2_32 -lwsock32

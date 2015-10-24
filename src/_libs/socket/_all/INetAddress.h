@@ -7,32 +7,15 @@
 class INetAddress
 {
 public:
-    INetAddress(char* ip, uint port);
-    INetAddress(char* ip);
+    INetAddress(char* ip, uint port) throw(int);
+    INetAddress(char* ip) throw(int);
 	
     INetAddress(struct sockaddr_in addr);
     
     INetAddress(uint port);
     INetAddress();
     
-    bool isErroneous()
-    {
-        return error != 0;
-    }
-    sint getError()
-    {
-        return error;
-    }
-    
-	const char* getIP() const
-	{
-		#if OS == WIN
-			return inet_ntoa(addr.sin_addr);
-		#elif OS == LINUX
-			inet_ntop(AF_INET, &addr.sin_addr, ip, 16);
-			return ip;
-		#endif
-	}
+	const char* getIP() const;
 	
     struct sockaddr_in toSockAddrIn() const
     {
@@ -68,8 +51,6 @@ private:
     sint size;
     
     uint port;
-    
-    sint error;
 };
 
 #endif	/* _LIBS_INETADDRESS_H */

@@ -9,3 +9,10 @@ int initSockets()
 	return 0;
 #endif
 }
+
+void stopSockets()
+{
+#if OS == WIN
+    WSACleanup();
+#endif
+}
