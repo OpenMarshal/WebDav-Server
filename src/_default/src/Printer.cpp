@@ -1,6 +1,13 @@
 #include "Printer.h"
+#include "_libs/mutex/mutex.h"
 
-std::ostream* ___output = 0;
+static std::ostream* ___output = 0;
+static ::Mutex mutex;
+
+::Mutex& getOutputMutex()
+{
+	return mutex;
+}
 
 std::ostream& getOutput()
 {

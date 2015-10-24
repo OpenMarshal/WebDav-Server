@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableDelayedExpansion
 
-@if exist makefile del /f _objs
+@if exist _objs del /f _objs
 
 echo OBJSX = \> _objs
 

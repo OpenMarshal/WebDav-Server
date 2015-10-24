@@ -9,11 +9,18 @@
 #include <fstream>
 #include <time.h>
 
+
 HttpResponse* computeRequest(HttpRequest* req, CommandManager* cmdMng)
 {
 	HttpResponseBuilder* res;
 	
+	std::string resDataString(req->toBytes(), req->getSize());
+	::getOutputMutex().lock();
+	getOutput() << std::endl << "************IN**************" << std::endl;
+	getOutput() << resDataString << std::endl;
+	
 	getOutput() << " :: " << req->getCommand() << std::endl;
+	::getOutputMutex().unlock();
 	
 	try
 	{
@@ -24,7 +31,9 @@ HttpResponse* computeRequest(HttpRequest* req, CommandManager* cmdMng)
 	}
 	catch(FileNotFoundException ex)
 	{
+		::getOutputMutex().lock();
 		getOutput() << " ** NOT FOUND : " << ex.getFilePath() << std::endl;
+		::getOutputMutex().unlock();
 		res = &HttpResponse::create()
 			.setMessage("Not Found")
 			.setCode(404);
@@ -38,14 +47,14 @@ HttpResponse* computeRequest(HttpRequest* req, CommandManager* cmdMng)
 	
 	time_t rawtime;
 	struct tm* timeinfo;
-	char date[80];
+	char date[100];
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	
-	strftime(date, 80, "%a, %d %h %Y %T GMT", timeinfo);
+	strftime(date, 100, "%a, %d %b %Y %X GMT", timeinfo);
 	
 	return (*res)
-			.addHeader("Connection", "close")
+			.addHeader("Connection", "keep-alive")
 			.addHeader("Date", date)
 			.addHeader("Server", "WebDav Server Master")
 			.addHeader("Keep-Alive", "timeout=5, max=100")
@@ -71,11 +80,13 @@ static void server_runtime(server_runtime_data* _data)
 
 	std::string resDataString(res->toBytes(), res->getSize());
 
+	::getOutputMutex().lock();
 	getOutput() << std::endl << "****************************" << std::endl;
 	getOutput() << res->getMessage() << std::endl;
 	getOutput() << "*********" << std::endl;
 	getOutput() << resDataString;
 	getOutput() << std::endl << "****************************" << std::endl;
+	::getOutputMutex().unlock();
 
 	client->send(res->toBytes(), res->getSize());
 
@@ -115,7 +126,9 @@ int main(int argc, char* argv[])
 	}
 	catch(SocketCreationException& ex)
 	{
+		::getOutputMutex().lock();
 		getOutput() << " ERROR! " << ex.getFunctionName() << " - " << ex.getErrorNo();
+		::getOutputMutex().unlock();
 	}
 	
 	stopSockets();

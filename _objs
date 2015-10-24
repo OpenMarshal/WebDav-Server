@@ -5,6 +5,7 @@ OBJSX = \
 	$(OBJECT_DIR)/Propfind.o \
 	$(OBJECT_DIR)/Printer.o \
 	$(OBJECT_DIR)/file.o \
+	$(OBJECT_DIR)/mutex.o \
 	$(OBJECT_DIR)/HttpMessage.o \
 	$(OBJECT_DIR)/HttpRequest.o \
 	$(OBJECT_DIR)/HttpResponse.o \
@@ -17,7 +18,7 @@ OBJSX = \
 	$(OBJECT_DIR)/ExString.o \
 	$(OBJECT_DIR)/thread.o \
  
-build_objs:  $(OBJECT_DIR)/main.o $(OBJECT_DIR)/CommandManager.o $(OBJECT_DIR)/Options.o $(OBJECT_DIR)/Propfind.o $(OBJECT_DIR)/Printer.o $(OBJECT_DIR)/file.o $(OBJECT_DIR)/HttpMessage.o $(OBJECT_DIR)/HttpRequest.o $(OBJECT_DIR)/HttpResponse.o $(OBJECT_DIR)/ServerSocket.o $(OBJECT_DIR)/Socket.o $(OBJECT_DIR)/Datagram.o $(OBJECT_DIR)/DatagramSocket.o $(OBJECT_DIR)/INetAddress.o $(OBJECT_DIR)/InitSocket.o $(OBJECT_DIR)/ExString.o $(OBJECT_DIR)/thread.o
+build_objs:  $(OBJECT_DIR)/main.o $(OBJECT_DIR)/CommandManager.o $(OBJECT_DIR)/Options.o $(OBJECT_DIR)/Propfind.o $(OBJECT_DIR)/Printer.o $(OBJECT_DIR)/file.o $(OBJECT_DIR)/mutex.o $(OBJECT_DIR)/HttpMessage.o $(OBJECT_DIR)/HttpRequest.o $(OBJECT_DIR)/HttpResponse.o $(OBJECT_DIR)/ServerSocket.o $(OBJECT_DIR)/Socket.o $(OBJECT_DIR)/Datagram.o $(OBJECT_DIR)/DatagramSocket.o $(OBJECT_DIR)/INetAddress.o $(OBJECT_DIR)/InitSocket.o $(OBJECT_DIR)/ExString.o $(OBJECT_DIR)/thread.o
  
 $(OBJECT_DIR)/main.o: $(SOURCE_DIR)/main.cpp 
 	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/main.cpp -o $(OBJECT_DIR)/main.o $(LIBS) 
@@ -31,6 +32,8 @@ $(OBJECT_DIR)/Printer.o: $(SOURCE_DIR)/_default\src\Printer.cpp
 	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_default\src\Printer.cpp -o $(OBJECT_DIR)/Printer.o $(LIBS) 
 $(OBJECT_DIR)/file.o: $(SOURCE_DIR)/_libs\file\file.cpp 
 	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\file\file.cpp -o $(OBJECT_DIR)/file.o $(LIBS) 
+$(OBJECT_DIR)/mutex.o: $(SOURCE_DIR)/_libs\mutex\mutex.cpp 
+	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\mutex\mutex.cpp -o $(OBJECT_DIR)/mutex.o $(LIBS) 
 $(OBJECT_DIR)/HttpMessage.o: $(SOURCE_DIR)/_libs\protocol\http\HttpMessage.cpp 
 	@$(COMP) $(CFLAGS) -c $(SOURCE_DIR)/_libs\protocol\http\HttpMessage.cpp -o $(OBJECT_DIR)/HttpMessage.o $(LIBS) 
 $(OBJECT_DIR)/HttpRequest.o: $(SOURCE_DIR)/_libs\protocol\http\HttpRequest.cpp 

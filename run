@@ -1,8 +1,0 @@
-#!/bin/bash
-
-make debug
-
-if [ -f "webdav_server" ] || [ -f "webdav_server.exe" ]
-then
-	./webdav_server* | less
-fi
